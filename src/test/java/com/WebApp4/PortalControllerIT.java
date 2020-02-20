@@ -91,6 +91,8 @@ public class PortalControllerIT {
 
         JSONAssert.assertEquals(IntegrationTestingConstants.DEMO_RESPONSE, response.getBody(), false);
     }
+
+
 //
 //    @Test
 //    public void testGetTabConfig() {
@@ -178,7 +180,28 @@ public class PortalControllerIT {
                 createURLWithPort("/topics"),
                 HttpMethod.POST, entity, String.class);
 
-    assertEquals(200,response.getStatusCodeValue());
+        assertEquals(200,response.getStatusCodeValue());
+    }
+    @Test
+    public void testUpdateTopic() throws JsonParseException, JsonMappingException, IOException {
+        Topic topic = new Topic("three","three","three");
+        HttpEntity<Topic> entity = new HttpEntity<Topic>(topic,headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/topics/"+topic.getId()),
+                HttpMethod.PUT, entity, String.class);
+
+        assertEquals(200,response.getStatusCodeValue());
+    }
+    @Test
+    public void testDeleteTopic() throws JsonParseException, JsonMappingException, IOException {
+        HttpEntity<String> entity = new HttpEntity<String>(null,headers);
+        String topic = "three";
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/topics/"+topic),
+                HttpMethod.DELETE, entity, String.class);
+
+        assertEquals(200,response.getStatusCodeValue());
     }
 //
 //    @Test
