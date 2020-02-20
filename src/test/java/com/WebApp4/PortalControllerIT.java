@@ -1,8 +1,13 @@
-//package com.WebApp4;
+package com.WebApp4;
 
+import com.WebApp.DemoApplication;
+import com.WebApp.Topic.pojo.Topic;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
 import org.junit.Before;
-//import org.junit.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,60 +15,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.http.HttpHeaders;
+import java.io.IOException;
+import java.util.List;
 
-//package com.WebApp4;
-//
-//import static org.junit.Assert.assertEquals;
-//
-//import java.io.File;
-//import java.io.FileInputStream;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.util.List;
-//import java.util.Map;
-//
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.skyscreamer.jsonassert.JSONAssert;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.context.embedded.LocalServerPort;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.web.client.TestRestTemplate;
-//import org.springframework.core.io.ClassPathResource;
-//import org.springframework.core.io.Resource;
-//import org.springframework.http.HttpEntity;
-//import org.springframework.http.HttpHeaders;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.mock.web.MockMultipartFile;
-//import org.springframework.test.context.junit4.SpringRunner;
-//import org.springframework.web.multipart.MultipartFile;
-//
-//import com.fasterxml.jackson.core.JsonParseException;
-//import com.fasterxml.jackson.core.type.TypeReference;
-//import com.fasterxml.jackson.databind.JsonMappingException;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.google.gson.Gson;
-//import com.kuliza.lending.common.utils.CommonHelperFunctions;
-//import com.kuliza.lending.engine_common.models.CustomURLMapper;
-//import com.kuliza.lending.portal.PortalApplication;
-//import com.kuliza.lending.portal.models.PortalCommentHistory;
-//import com.kuliza.lending.portal.models.PortalConfigurationModel;
-//import com.kuliza.lending.portal.pojo.BucketConfiguration;
-//import com.kuliza.lending.portal.pojo.ClaimUnclaimInput;
-//import com.kuliza.lending.portal.utils.IntegrationTestingConstants;
-//
-/*
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringRunner.class)
-//@SpringBootTest(classes = PortalApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = DemoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PortalControllerIT {
-//
+//ner;
+////import org.springframework.web.multipart.MultipartFile;
+////
+////import com.fasterxml.jackson.core.JsonParseException;
+////import com.fasterxml.jackson.core.type.TypeReference;
+////import com.fasterxml.jackson.databind.JsonMappingException;
     @LocalServerPort
     private int port;
 //
@@ -84,7 +54,7 @@ public class PortalControllerIT {
     {
         return "http://localhost:" + port + uri;
     }
-    */
+
 //
 //    private PortalConfigurationModel getPortalConfigurationModelObject(String portalConfigurationModelJSONString) throws JsonParseException, JsonMappingException, IOException {
 //        return mapper.readValue(
@@ -111,16 +81,16 @@ public class PortalControllerIT {
 //        return mapper.readValue(portalCommentHistoryJSONString,PortalCommentHistory.class);
 //    }
 //
-   /* @Test
-    public void testGetCommentDetails() {
+    @Test
+    public void testGetAllTopics() throws JSONException {
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort(portalBaseURL + IntegrationTestingConstants.GET_COMMENT_URL),
+                createURLWithPort("/topics"),
                 HttpMethod.GET, entity, String.class);
 
-        JSONAssert.assertEquals(IntegrationTestingConstants.GET_COMMENT_RESPONSE, response.getBody(), false);
-    }*/
+        JSONAssert.assertEquals(IntegrationTestingConstants.DEMO_RESPONSE, response.getBody(), false);
+    }
 //
 //    @Test
 //    public void testGetTabConfig() {
@@ -183,19 +153,7 @@ public class PortalControllerIT {
 //
 //    }
 //
-//// @Test
-//// public void postConfigurePortal() throws JsonParseException, JsonMappingException, IOException {
-//// HttpEntity<PortalConfigurationModel> entity = new HttpEntity<PortalConfigurationModel>
-//// (getPortalConfigurationModelObject(IntegrationTestingConstants.PORTAL_CONFIGURATION_MODEL_JSON_STRING), headers);
-////
-//// ResponseEntity<String> response = restTemplate.exchange(
-//// createURLWithPort(portalBaseURL + IntegrationTestingConstants.POST_ADD_PRODUCT_CONFIG_URL),
-//// HttpMethod.POST, entity, String.class);
-////
-//// assertEquals("Personal Loan ----",getPortalConfigurationModelObject(new Gson().toJson
-//// (CommonHelperFunctions.getHashMapFromJsonString(response.getBody()).get("data"))).getProductLabel());
-////
-//// }
+//
 //
 //    @Test
 //    public void updateConfigurePortal() throws JsonParseException, JsonMappingException, IOException{
@@ -211,20 +169,17 @@ public class PortalControllerIT {
 //
 //    }
 //
-//    @Test
-//    public void addBucketConfig() throws JsonParseException, JsonMappingException, IOException {
-//        HttpEntity<List<BucketConfiguration>> entity = new HttpEntity<List<BucketConfiguration>>
-//                (getBucketConfigurationList(getPortalConfigurationModelObject(IntegrationTestingConstants.PORTAL_CONFIGURATION_MODEL_JSON_STRING)), headers);
-//
-//
-//        ResponseEntity<String> response = restTemplate.exchange(
-//                createURLWithPort(portalBaseURL + IntegrationTestingConstants.POST_ADD_BUCKET_CONFIG_URL),
-//                HttpMethod.POST, entity, String.class);
-//
-//        assertEquals("test1237",getPortalConfigurationModelObject(CommonHelperFunctions.getJsonString
-//                (CommonHelperFunctions.getHashMapFromJsonString(response.getBody()).get("data"))).getProductType());
-//
-//    }
+    @Test
+    public void addTopic() throws JsonParseException, JsonMappingException, IOException {
+        Topic topic = new Topic("three","three","three");
+        HttpEntity<Topic> entity = new HttpEntity<Topic>(topic,headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/topics"),
+                HttpMethod.POST, entity, String.class);
+
+    assertEquals(200,response.getStatusCodeValue());
+    }
 //
 //    @Test
 //    public void createCustomURLMapping() throws JsonParseException, JsonMappingException, IOException {
@@ -354,4 +309,4 @@ public class PortalControllerIT {
 //// JSONAssert.assertEquals(IntegrationTestingConstants.IMPORT_CUSTOM_ACTION_CONFIGURATION_RESPONSE, response.getBody(), false);
 //// }
 //
-//}
+}
