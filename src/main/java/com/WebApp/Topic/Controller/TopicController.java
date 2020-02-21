@@ -13,13 +13,12 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
     @GetMapping("/topics")
-    public List<Topic> getTopics()
-    {
+    public List<Topic> getTopics(){
        return topicService.getTopic();
     }
 
     @GetMapping("/topics/{id}")
-    public Optional<Topic> getTopic(@PathVariable String id)
+    public List<Topic> getTopic(@PathVariable String id)
     {
         return topicService.getTopic(id);
     }

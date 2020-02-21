@@ -16,6 +16,11 @@ public class TopicService {
     @Autowired
     private TopicRepo topicRepo;
 
+    public int sum(int v1,int v2)
+    {
+        return v1+v2;
+    }
+
     private List<Topic> topics= new ArrayList<>( Arrays.asList(
             new Topic("one","one","one"),
                 new Topic("tow","tow","tow")
@@ -27,9 +32,14 @@ public class TopicService {
         return topics;
     }
 
-    public Optional<Topic> getTopic(String id)
+    public List<Topic> getTopic(String id)
     {
-       return topicRepo.findById(id);
+       Optional<Topic> topics = topicRepo.findById(id);
+        ArrayList<Topic> result = new ArrayList<>();
+        topics.ifPresent(result::add);
+        return result;
+       //List<>
+
        //return topics.stream().filter(t->t.getId().equals(id)).findFirst().get();
     }
 
