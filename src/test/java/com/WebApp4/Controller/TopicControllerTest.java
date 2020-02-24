@@ -50,4 +50,23 @@ public class TopicControllerTest {
         Mockito.when(topicService.getTopic("one")).thenReturn(topics);
         Assert.assertEquals(expected.get(0).getId(),topicController.getTopic("one").get(0).getId());
     }
+
+    @Test
+    public void getAllTopicTest(){
+        List<Topic> topics = new ArrayList<>();
+        Topic topic = new Topic("one", "one", "one");
+        topics.add(topic);
+        topics.add(new Topic("two", "two", "one"));
+        topics.add(new Topic("three", "three", "three"));
+
+//        Optional<Topic> expectedTopic = Optional.of(new Topic("one", "one", "one"));
+
+        List<Topic> expected = new ArrayList<>();
+        Topic expectt = new Topic("one", "one", "one");
+        expected.add(expectt);
+
+
+        Mockito.when(topicService.getTopic()).thenReturn(topics);
+        Assert.assertEquals(expected.get(0).getId(),topicController.getTopics().get(0).getId());
+    }
 }
